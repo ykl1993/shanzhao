@@ -1,0 +1,28 @@
+<!--index.wxml-->
+<view class="container">
+  <view class="login-from">
+      <form bindsubmit='doLogin'>
+          <!--选择的图片-->
+          <view>
+             <image name="userImage" bindtouchstart="handleTouchStart" 
+              bindtouchend="handleTouchEnd" 
+              bindlongpress="handleLongPress" 
+              bindtap="handleClick"  src='{{imageInfo}}' style='width:250px;height:250px;filter: blur({{mohudu}});'></image>
+            <view class="{{showView?'imageFont':'header_view_hide'}}" bindtouchstart="handleTouchStart" bindlongpress="handleLongPress" bindtouchend="handleTouchEnd" >按住查看原图```</view>
+          </view>
+         
+          <view class="section section_gap">
+            <text class="section__title">请先选择闪照显示时长</text>
+            <view class="body-view">
+                <slider name="sliderNumber" bindchange="slider3change" block-color='#179B16' show-value min='1' max='10'/>
+            </view>
+          </view>
+          <!--按钮-->
+          <view>
+              <button bindtap='pic' type="primary">开始制作闪照</button>
+              <button open-type="share" type="primary">分享闪照</button>
+              
+          </view>
+      </form>
+  </view>
+</view>

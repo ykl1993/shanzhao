@@ -1,0 +1,19 @@
+/**index.wxss**/
+.container {
+  display: flex;
+  justify-content: center;
+}
+.imageFont {
+  width: 100px;
+  height: auto;  
+  position: relative;
+  left: 0;
+  top: -150px;
+  right: 0;
+  margin: auto;
+  text-align: center;
+  background: yellowgreen;
+}
+.header_view_hide {
+  display: none;
+}
