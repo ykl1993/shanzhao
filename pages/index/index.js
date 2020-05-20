@@ -1,13 +1,21 @@
 
 Page({
+
   data: {
     mohudu:"6px",
     imageInfo: "../resource/images/dsp.jpg",
-    showView: true
+    showView: true,
+    shareId: '',
+    sliderValue: 1,    // 默认1
+    status: 1,     // 1 允许客户看图片, 0, 销毁图片
+    imageMoHu: "",   // 显示模糊的图片
+    imageGaoQin: "", // 存在清晰图片
   },
   slider3change : function(e) {
     console.log(e);
     console.log(e.detail.value);
+    var that = this
+    that.data.sliderValue = e.detail.value
   },
   // 登录  
   doLogin: function (e) {
@@ -25,9 +33,52 @@ Page({
         // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
         var tempFilePaths = res.tempFilePaths
         console.log(tempFilePaths)
-        that.setData({
-          imageInfo : tempFilePaths[0]
+        wx.uploadFile({
+          url: 'https://www.yingkailing.com/shanzhao/share/uploadImage', //仅为示例，非真实的接口地址
+          filePath: tempFilePaths[0],
+          name: 'file',
+          formData: {
+            'sliderValue': that.data.sliderValue
+          },
+          success(res) {
+            debugger
+            const data = res.data
+            const imageMap = JSON.parse(data);
+            that.setData({
+              imageInfo: imageMap.data.imageUrl,
+              shareId: imageMap.data.shareId,
+              status: imageMap.data.status,
+              imageGaoQin: imageMap.data.imageUrl,
+              imageMoHu: imageMap.data.imageMoHuUrl
+            })
+            // that.data.shareId = imageMap.data.shareId
+            // that.data.status = imageMap.data.status
+            // that.data.imageInfo = imageMap.data.imageUrl
+
+            //do something
+          }
         })
+
+        // 选择图片成功时, 调用后台请求
+        // wx.request({
+        //   url: 'http://127.0.0.1:8098/shanzhao/share/updateStatus',
+        //   data: {
+        //     username: 'admin',
+        //     password: 'admin'
+        //   },
+        //   method: 'POST',
+        //   header: {
+        //     'content-type': 'application/json'
+        //   },
+        //   success: function (res) {
+        //     console.log(res.data);
+        //     that.data.shareId = res.data.shareId
+        //   },
+        //   fail: function (res) {
+        //     console.log("--------fail--------");
+        //   }
+        // })
+        
       }
     })
   },
@@ -45,7 +96,8 @@ Page({
     console.log("长按中....")
     var that = this
     this.setData({
-      mohudu: '0px'
+      mohudu: '0px',
+      imageInfo: that.data.imageGaoQin
     })
   },
   handleTouchEnd: function (e) {
@@ -53,19 +105,24 @@ Page({
     var that = this
     this.setData({
       mohudu: '6px',
-      showView: true
+      showView: true,
+      imageInfo: that.data.imageMoHu
     })
   },
   onShareAppMessage: function () {
+    var that = this
+    var shareId = that.data.shareId
     return {
       title: '您的好友给您分享了一张闪照,快来瞧瞧吧',
-      path: 'pages/showImage/showImage',
-      imageUrl: this.data.imageInfo,
+      path: 'pages/showImage/showImage?shareId=' + shareId,
+      imageUrl: this.data.imageMoHu,
       success: (res) => {
         // 分享成功
+        console.log("分享成功" + res)
       },
       fail: (res) => {
         // 分享失败
+        console.log("分享失败" + res)
       }
     }
   }

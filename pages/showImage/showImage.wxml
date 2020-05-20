@@ -16,7 +16,7 @@ bindtap="handleClick"  src='{{imageInfo}}' style='width:250px;height:250px;filte
           </view>
           <!--按钮-->
           <view>
-              <button bindtap='pic' type="primary">签到</button>
+              <button bindtap='qiandao' type="primary">签到</button>
               <button open-type="share" type="primary">看广告</button>
               
           </view>
